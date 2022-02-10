@@ -9,7 +9,7 @@ import (
 	"time"
 
 	"github.com/sebnyberg/flagtags"
-	policefeed "github.com/sebnyberg/policefeed"
+	feed "github.com/sebnyberg/policefeed/feed"
 	"github.com/urfave/cli/v2"
 	"golang.org/x/sync/errgroup"
 )
@@ -41,7 +41,7 @@ func NewSubscribeCmd() *cli.Command {
 
 func runSubscribe(ctx context.Context, conf subscriberConfig) error {
 	// Validate regions provided in config
-	collector, err := policefeed.NewCollector(
+	collector, err := feed.NewCollector(
 		strings.Split(conf.Regions, ","),
 		conf.RSSBaseURL,
 		time.Second*1,

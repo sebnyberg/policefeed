@@ -1,4 +1,4 @@
-package policefeed
+package feed
 
 import (
 	"database/sql"
