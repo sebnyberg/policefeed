@@ -1,0 +1,8 @@
+version: "1"
+packages:
+  - name: "feedpg"
+    path: "./feedpg"
+    queries: "./feedpg/queries.sql"
+    schema: ["./migrations/"]
+    engine: "postgresql"
+    emit_db_tags: false

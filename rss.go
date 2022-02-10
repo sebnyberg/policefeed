@@ -41,7 +41,8 @@ func EventsFromRSS(r io.ReadCloser) ([]Event, error) {
 			return nil, fmt.Errorf("parse publish time, %w", err)
 		}
 		events[i] = Event{
-			ID:          item.Guid,
+			ID:          NewEventID(item.Guid),
+			URL:         item.Guid,
 			Title:       item.Title,
 			Region:      feed.Channel.Title,
 			Description: item.Description,
