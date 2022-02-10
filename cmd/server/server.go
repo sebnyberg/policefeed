@@ -9,7 +9,7 @@ import (
 	"strings"
 
 	"github.com/sebnyberg/flagtags"
-	policefeed "github.com/sebnyberg/police-feed-se"
+	policefeed "github.com/sebnyberg/policefeed"
 	"github.com/urfave/cli/v2"
 	"golang.org/x/sync/errgroup"
 )

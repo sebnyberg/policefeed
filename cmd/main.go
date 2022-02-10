@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/sebnyberg/police-feed-se/cmd/server"
-	"github.com/sebnyberg/police-feed-se/cmd/subscribe"
+	"github.com/sebnyberg/policefeed/cmd/server"
+	"github.com/sebnyberg/policefeed/cmd/subscribe"
 	"github.com/urfave/cli/v2"
 )
 

@@ -1,4 +1,4 @@
-module github.com/sebnyberg/police-feed-se
+module github.com/sebnyberg/policefeed
 
 go 1.17
 

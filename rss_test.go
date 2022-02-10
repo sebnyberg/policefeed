@@ -4,7 +4,7 @@ import (
 	"os"
 	"testing"
 
-	policefeed "github.com/sebnyberg/police-feed-se"
+	policefeed "github.com/sebnyberg/policefeed"
 	"github.com/stretchr/testify/require"
 )
 
