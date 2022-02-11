@@ -9,7 +9,7 @@ import (
 	"strings"
 
 	"github.com/sebnyberg/flagtags"
-	policefeed "github.com/sebnyberg/policefeed"
+	feed "github.com/sebnyberg/policefeed/feed"
 	"github.com/urfave/cli/v2"
 	"golang.org/x/sync/errgroup"
 )
@@ -53,7 +53,7 @@ func runServer(ctx context.Context, conf serverConfig) error {
 	// addr := listener.Addr()
 
 	// Validate regions provided in config
-	regions := policefeed.NewRegions(conf.RSSBaseURL)
+	regions := feed.NewRegions(conf.RSSBaseURL)
 	for _, region := range strings.Split(conf.Regions, ",") {
 		if !regions.Exists(region) {
 			return fmt.Errorf(

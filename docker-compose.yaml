@@ -1,0 +1,13 @@
+version: '3'
+services:
+  db:
+    build:
+      context: .
+      dockerfile: pg.Dockerfile
+    ports:
+      - ${PGPORT}:${PGPORT}
+    environment:
+      POSTGRES_USER: "${PGUSER}"
+      POSTGRES_PASSWORD: "${PGPASSWORD}"
+      PGSSLMODE: "${PGSSLMODE}"
+      PGDATABASE: "${PGDATABASE}"

@@ -1,4 +1,4 @@
-package policefeed
+package feed
 
 import (
 	"context"
@@ -8,9 +8,6 @@ import (
 	"sync"
 	"time"
 )
-
-type EventCollectorConfig struct {
-}
 
 type EventCollector struct {
 	running bool
@@ -104,8 +101,6 @@ func (c *EventCollector) run() {
 			}
 		}
 	}()
-
-	// Done!
 }
 
 // readRSSFeed reads the RSS feed, putting any unseen events into the events
@@ -133,7 +128,7 @@ func (c *EventCollector) readRSSFeed(region string, idx int) error {
 			return fmt.Errorf("parse rss feed err, %v", res.StatusCode)
 		}
 		for _, event := range events {
-			if _, exists := c.regionSeen[idx][event.ID]; !exists {
+			if _, exists := c.regionSeen[idx][event.URL]; !exists {
 				select {
 				case <-c.errCtx.Done():
 					return c.err
@@ -141,7 +136,7 @@ func (c *EventCollector) readRSSFeed(region string, idx int) error {
 				case <-time.After(c.sendTimeout):
 					return fmt.Errorf("event channel receive timeout %v", c.sendTimeout)
 				}
-				c.regionSeen[idx][event.ID] = struct{}{}
+				c.regionSeen[idx][event.URL] = struct{}{}
 			}
 		}
 		select {
