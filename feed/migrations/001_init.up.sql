@@ -8,7 +8,8 @@ create table if not exists police_event (
   description text not null,
   publish_time timestamptz not null,
   create_time timestamptz not null,
-  revision text not null,
+  content_hash bytea not null,
+  revision int not null,
   constraint police_event_pk
     primary key (id, revision)
 );

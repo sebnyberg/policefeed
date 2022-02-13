@@ -7,12 +7,16 @@ import (
 )
 
 type Event struct {
-	ID          uuid.UUID
-	URL         string
-	Title       string
-	Region      string
-	Description string
-	PublishTime time.Time
+	ID              uuid.UUID
+	URL             string
+	Title           string
+	Region          string
+	Description     string
+	ArticleContents string
+	Revision        int32
+	CreateTime      time.Time
+	PublishTime     time.Time
+	ContentHash     []byte
 
 	// Todo: add geometries
 	// EventGeometryRetryTime time.Time // next time to try fetch event geometry

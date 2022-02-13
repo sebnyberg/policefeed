@@ -1,13 +1,13 @@
 package feed
 
-type region struct {
+type rssRegion struct {
 	ID   string
 	Name string
 	// Todo: add geometries
 	// Geometry geom.T
 }
 
-var regions = map[string]region{
+var rssRegions = map[string]rssRegion{
 	"blekinge":        {ID: "blekinge", Name: "Blekinge"},
 	"dalarna":         {ID: "dalarna", Name: "Dalarna"},
 	"gotland":         {ID: "gotland", Name: "Gotland"},

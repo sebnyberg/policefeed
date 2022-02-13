@@ -16,5 +16,6 @@ type PoliceEvent struct {
 	Description string
 	PublishTime time.Time
 	CreateTime  time.Time
-	Revision    string
+	ContentHash []byte
+	Revision    int32
 }

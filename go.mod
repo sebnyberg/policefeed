@@ -37,6 +37,7 @@ require (
 	github.com/google/uuid v1.3.0
 	github.com/jackc/pgx/v4 v4.15.0
 	github.com/pmezard/go-difflib v1.0.0 // indirect
+	github.com/sebnyberg/autodotenv v0.0.0-20210324181858-8c7526bcc8af
 	github.com/sebnyberg/flagtags v0.0.0-20210812191134-9825f4cda663
 	github.com/urfave/cli/v2 v2.3.0
 	golang.org/x/sync v0.0.0-20210220032951-036812b2e83c

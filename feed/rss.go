@@ -2,6 +2,7 @@ package feed
 
 import (
 	"context"
+	"crypto/sha256"
 	"encoding/xml"
 	"fmt"
 	"io"
@@ -39,16 +40,16 @@ const rssBaseURL = "https://polisen.se/aktuellt/rss/%v/handelser-rss---%v/"
 func EventsFromRSS(ctx context.Context, regionIDs []string) ([]Event, error) {
 	events := make(chan []Event)
 	if len(regionIDs) == 1 && regionIDs[0] == "" {
-		regionIDs = keys(regions)
+		regionIDs = keys(rssRegions)
 	}
 
 	doRegion := func(regionCtx context.Context, regionID string) func() error {
 		return func() error {
 			// Validate region ID
-			if _, exists := regions[regionID]; !exists {
+			if _, exists := rssRegions[regionID]; !exists {
 				return fmt.Errorf(
 					"unknown region %v, choose one or more of %v",
-					regionID, strings.Join(keys(regions), ","),
+					regionID, strings.Join(keys(rssRegions), ","),
 				)
 			}
 
@@ -121,13 +122,23 @@ func eventsFromRSSBody(r io.ReadCloser) ([]Event, error) {
 		if err != nil {
 			return nil, fmt.Errorf("parse publish time, %w", err)
 		}
+		h := sha256.New()
+		if _, err := h.Write([]byte(item.Title)); err != nil {
+			return nil, fmt.Errorf("content hash, %w", err)
+		}
+		if _, err := h.Write([]byte(item.Description)); err != nil {
+			return nil, fmt.Errorf("content hash, %w", err)
+		}
+		contentHash := h.Sum(nil)
 		events[i] = Event{
 			ID:          NewEventID(item.Guid),
 			URL:         item.Guid,
 			Title:       item.Title,
 			Region:      feed.Channel.Title,
 			Description: item.Description,
+			CreateTime:  time.Now(),
 			PublishTime: publishTime,
+			ContentHash: contentHash,
 		}
 	}
 	return events, nil

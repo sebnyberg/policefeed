@@ -5,54 +5,46 @@ package feedpg
 
 import (
 	"context"
-	"time"
 
+	"github.com/lib/pq"
 	"github.com/google/uuid"
 )
 
-const updatePoliceEvent = `-- name: UpdatePoliceEvent :exec
-insert into police_event (
-  id,
-  url,
-  title,
-  region,
-  description,
-  publish_time,
-  create_time,
-  revision
-) values (
-  $1,
-  $2,
-  $3,
-  $4,
-  $5,
-  $6,
-  $7,
-  $8
-)
+const listEvents = `-- name: ListEvents :many
+select id, url, title, region, description, publish_time, create_time, content_hash, revision
+from police_event
+where id = any ($1::uuid[])
 `
 
-type UpdatePoliceEventParams struct {
-	ID          uuid.UUID
-	Url         string
-	Title       string
-	Region      string
-	Description string
-	PublishTime time.Time
-	CreateTime  time.Time
-	Revision    string
-}
-
-func (q *Queries) UpdatePoliceEvent(ctx context.Context, arg UpdatePoliceEventParams) error {
-	_, err := q.db.ExecContext(ctx, updatePoliceEvent,
-		arg.ID,
-		arg.Url,
-		arg.Title,
-		arg.Region,
-		arg.Description,
-		arg.PublishTime,
-		arg.CreateTime,
-		arg.Revision,
-	)
-	return err
+func (q *Queries) ListEvents(ctx context.Context, ids []uuid.UUID) ([]PoliceEvent, error) {
+	rows, err := q.db.QueryContext(ctx, listEvents, pq.Array(ids))
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []PoliceEvent
+	for rows.Next() {
+		var i PoliceEvent
+		if err := rows.Scan(
+			&i.ID,
+			&i.Url,
+			&i.Title,
+			&i.Region,
+			&i.Description,
+			&i.PublishTime,
+			&i.CreateTime,
+			&i.ContentHash,
+			&i.Revision,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
 }
