@@ -1,10 +1,11 @@
 module github.com/sebnyberg/policefeed
 
-go 1.17
+go 1.18
 
 require (
 	github.com/maxbrunsfeld/counterfeiter/v6 v6.4.1
 	github.com/stretchr/testify v1.7.0
+	golang.org/x/net v0.0.0-20211013171255-e13a2654a71e
 )
 
 require (

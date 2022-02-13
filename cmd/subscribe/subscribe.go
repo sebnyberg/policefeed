@@ -9,14 +9,13 @@ import (
 	"time"
 
 	"github.com/sebnyberg/flagtags"
-	feed "github.com/sebnyberg/policefeed/feed"
+	"github.com/sebnyberg/policefeed/feed"
 	"github.com/urfave/cli/v2"
 	"golang.org/x/sync/errgroup"
 )
 
 type subscriberConfig struct {
-	RSSBaseURL string `value:"https://polisen.se/aktuellt/rss/%v/handelser-rss---%v/" usage:"base URL with %v placeholder for region ID"`
-	Regions    string `value:"stockholms-lan" usage:"comma-separated list of region IDs from the Swedish Police Website. If 'all' subscribes to all regions."`
+	Regions string `value:"" usage:"comma-separated list of region IDs from the Swedish Police Website. If 'all' subscribes to all regions."`
 }
 
 func NewSubscribeCmd() *cli.Command {
@@ -40,26 +39,39 @@ func NewSubscribeCmd() *cli.Command {
 }
 
 func runSubscribe(ctx context.Context, conf subscriberConfig) error {
-	// Validate regions provided in config
-	collector, err := feed.NewCollector(
-		strings.Split(conf.Regions, ","),
-		conf.RSSBaseURL,
-		time.Second*1,
-		time.Second*60,
-	)
-	if err != nil {
-		return err
-	}
-
-	receive, err := collector.Subscribe(ctx)
-	if err != nil {
-		return err
-	}
+	regionIDs := strings.Split(conf.Regions, ",")
 	for {
-		evt, err := receive()
+		events, err := feed.EventsFromRSS(ctx, regionIDs)
 		if err != nil {
 			return err
 		}
-		fmt.Println(evt)
+		fmt.Printf("Events: %d\n", len(events))
+		time.Sleep(time.Second * 5)
 	}
+
+	return nil
+	// feed.CollectEvents(regions)
+
+	// // Validate regions provided in config
+	// collector, err := feed.NewCollector(
+	// 	strings.Split(conf.Regions, ","),
+	// 	conf.RSSBaseURL,
+	// 	time.Second*1,
+	// 	time.Second*60,
+	// )
+	// if err != nil {
+	// 	return err
+	// }
+
+	// receive, err := collector.Subscribe(ctx)
+	// if err != nil {
+	// 	return err
+	// }
+	// for {
+	// 	evt, err := receive()
+	// 	if err != nil {
+	// 		return err
+	// 	}
+	// 	fmt.Println(evt)
+	// }
 }

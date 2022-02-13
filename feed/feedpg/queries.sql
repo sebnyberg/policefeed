@@ -18,3 +18,5 @@ insert into police_event (
   @create_time,
   @revision
 );
+
+
