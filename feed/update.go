@@ -135,17 +135,18 @@ func (u *Updater) Update(
 	for _, evt := range targetEvents {
 		u.toCreate[evt.ID] = evt
 	}
-	for _, evt := range rssEvents {
-		if v, exists := u.toCreate[evt.ID]; exists {
-			if bytes.Equal(v.ContentHash, evt.ContentHash) {
-				delete(u.toCreate, evt.ID) // no update needed
+	for _, rssEvent := range rssEvents {
+		if cur, exists := u.toCreate[rssEvent.ID]; exists {
+			if bytes.Equal(cur.ContentHash, rssEvent.ContentHash) ||
+				cur.PublishTime.After(rssEvent.PublishTime) {
+				delete(u.toCreate, rssEvent.ID) // should not update
 				continue
 			}
-			evt.Revision = v.Revision + 1
-			u.toCreate[evt.ID] = evt
+			rssEvent.Revision = cur.Revision + 1
+			u.toCreate[rssEvent.ID] = rssEvent
 		} else { // Create new event
-			evt.Revision = 1
-			u.toCreate[evt.ID] = evt
+			rssEvent.Revision = 1
+			u.toCreate[rssEvent.ID] = rssEvent
 		}
 	}
 
