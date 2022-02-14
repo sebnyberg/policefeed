@@ -71,7 +71,7 @@ func runServer(ctx context.Context, conf serverConfig) error {
 
 	g, ctx := errgroup.WithContext(ctx)
 	g.Go(func() error {
-		return feed.Update(ctx, rssFeed, eventStorage, time.Second*10)
+		return feed.Update(ctx, rssFeed, eventStorage, time.Minute*5)
 	})
 
 	return g.Wait()
