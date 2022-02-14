@@ -31,7 +31,7 @@ func (s *EventStorage) ListEvents(
 	ctx context.Context,
 	ids []uuid.UUID,
 ) ([]Event, error) {
-	dbEvents, err := s.queries.ListEvents(ctx, ids)
+	dbEvents, err := s.queries.ListRecentEvents(ctx, ids)
 	if err != nil {
 		return nil, err
 	}

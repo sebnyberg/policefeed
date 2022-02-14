@@ -48,3 +48,43 @@ func (q *Queries) ListEvents(ctx context.Context, ids []uuid.UUID) ([]PoliceEven
 	}
 	return items, nil
 }
+
+const listRecentEvents = `-- name: ListRecentEvents :many
+select distinct on (id) id, url, title, region, description, publish_time, create_time, content_hash, revision
+from police_event
+where id = any ($1::uuid[])
+order by id, revision desc
+`
+
+func (q *Queries) ListRecentEvents(ctx context.Context, ids []uuid.UUID) ([]PoliceEvent, error) {
+	rows, err := q.db.QueryContext(ctx, listRecentEvents, pq.Array(ids))
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []PoliceEvent
+	for rows.Next() {
+		var i PoliceEvent
+		if err := rows.Scan(
+			&i.ID,
+			&i.Url,
+			&i.Title,
+			&i.Region,
+			&i.Description,
+			&i.PublishTime,
+			&i.CreateTime,
+			&i.ContentHash,
+			&i.Revision,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
