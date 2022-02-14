@@ -62,16 +62,20 @@ func runServer(ctx context.Context, conf serverConfig) error {
 	}
 
 	// Create RSS feed fetcher
-	rssFeed := &feed.RSSAdapter{
-		RegionIDs: strings.Split(conf.Regions, ","),
-	}
+	rssFeed := feed.NewRSSAdapter(strings.Split(conf.Regions, ","), feed.EventsFromRSS)
 
 	// Init database eventStorage
 	eventStorage := feed.NewEventStorage(db)
 
 	g, ctx := errgroup.WithContext(ctx)
 	g.Go(func() error {
-		return feed.Update(ctx, rssFeed, eventStorage, time.Minute*5)
+		up := feed.NewUpdater()
+		for {
+			if err := up.Update(ctx, rssFeed, eventStorage); err != nil {
+				return err
+			}
+			time.Sleep(time.Minute * 5)
+		}
 	})
 
 	return g.Wait()

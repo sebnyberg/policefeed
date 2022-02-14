@@ -27,7 +27,7 @@ func NewEventStorage(db *sql.DB) *EventStorage {
 	}
 }
 
-func (s *EventStorage) ListEvents(
+func (s *EventStorage) ListUniqueEvents(
 	ctx context.Context,
 	ids []uuid.UUID,
 ) ([]Event, error) {
