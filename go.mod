@@ -3,9 +3,9 @@ module github.com/sebnyberg/policefeed
 go 1.18
 
 require (
+	github.com/lib/pq v1.10.2
 	github.com/maxbrunsfeld/counterfeiter/v6 v6.4.1
 	github.com/stretchr/testify v1.7.0
-	golang.org/x/net v0.0.0-20211013171255-e13a2654a71e
 )
 
 require (
@@ -19,7 +19,6 @@ require (
 	github.com/jackc/pgproto3/v2 v2.2.0 // indirect
 	github.com/jackc/pgservicefile v0.0.0-20200714003250-2b9c44734f2b // indirect
 	github.com/jackc/pgtype v1.10.0 // indirect
-	github.com/lib/pq v1.10.2 // indirect
 	github.com/russross/blackfriday/v2 v2.0.1 // indirect
 	github.com/shurcooL/sanitized_anchor_name v1.0.0 // indirect
 	go.uber.org/atomic v1.6.0 // indirect
