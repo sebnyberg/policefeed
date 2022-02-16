@@ -53,6 +53,6 @@ As per the [Police website](https://polisen.se/aktuellt/rss/):
 
 Or in English:
 
-> You may use our RSS-feeds in your own application given that it is evidently clear that the police is the source, and that you link to the event's corresponding article at polisen.se. It is forbidden to use the police logo.
+> You may use our RSS-feeds in your own application given that it is made clear that the police is the source, and that the article at polisen.se is linked to. It is forbidden to use the police logo.
 
 As per the MIT license, I waive any liability in the event that you misuse this software. The default configuration *should* be conservative enough to avoid undue pressure on the Police's servers.
